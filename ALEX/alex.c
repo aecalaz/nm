@@ -1,6 +1,6 @@
 #include "funcionesAlex.c"
 
-/* MAIN */
+/**********   MAIN    *************/
 int main (int argc, char *argv[]){
 	FILE* archivoFuente,*principioArchivoFuente;
 
