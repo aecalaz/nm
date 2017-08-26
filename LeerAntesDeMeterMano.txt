@@ -1,0 +1,16 @@
+Buenas!
+Esto intenta ser un repositorio de código fuente de un compilador «from scratch».
+Tenemos un branch "master" que usaremos cuando haya algo realmente potable... y un branch llamado "padawan".
+Todavía no encontré una necesidad de un brach llamado "knight", pero no descarto la opción.
+
+Así que para descargar el código fuente:
+git clone https://github.com/aecalaz/nm.git
+
+Para jugar un poco:
+git branch padawan
+git checkout padawan
+
+Abrir emacs, vi o el editor que más te guste, y hacer una fiesta.  ¬¬
+
+:P
+
