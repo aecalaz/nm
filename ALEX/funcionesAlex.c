@@ -1,30 +1,33 @@
 #include "funcionesAlex.h"
 #include "regExpAlex.c"
 
-
 /* DESARROLLO DE FUNCIONES */
-void mostrarFatal(char* texto){
+int mostrarFatal(char* texto){
 	printf (COLOR_ROJO"[FATAL]\t%s"RESET_COLOR,texto);
+	return 1;
 }
 
-void mostrarNormal(char* texto){
+int mostrarNormal(char* texto){
 	if (interactividad>=NORMAL){
 		printf (RESET_COLOR"\t%s"RESET_COLOR,texto);
 		if (interactividad==DEBUG){ fflush (stdin) ; scanf("%*c"); }
 	}
+	return 1;
 }
 
-void mostrarLog(char* texto){
+int mostrarLog(char* texto){
 	if (interactividad>=LOG)
 		printf (COLOR_AMARILLO"[LOG]\t%s"RESET_COLOR,texto);
 		if (interactividad==DEBUG){ fflush (stdin) ; scanf("%*c"); }
+	return 1;
 }
 
-void mostrarDebug(char* texto){
+int mostrarDebug(char* texto){
 	if (interactividad==DEBUG){
 		printf (COLOR_VERDE"[DEBUG]\t%s"RESET_COLOR,texto);
 		fflush (stdin) ; scanf("%*c");	
 	}
+	return 1;
 }
 
 int validaParametros (int cantArgumentos, char* argumentos[]){
@@ -97,7 +100,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 				sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 				mostrarNormal(stringAuxiliar);
 				tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-				//identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens],palabrasReservadas);
+				identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
 				(*cantidadDeTokens)++;			
 				desplazamiento=0;
 			}
@@ -105,9 +108,21 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 	}
 }
 
-void identificaTipoDeToken (char* fruta[]){
-	mostrarDebug("Identificando Token\n");
+int identificaTipoDeToken (char *token){
+	sprintf(stringAuxiliar,"Identificando Token:  [%s]",token);
+	mostrarDebug(stringAuxiliar);
+	int esAlgo=0;
+	if (!esAlgo) (esPalabraReservada(token))?esAlgo=mostrarLog("Es una Palabra Reservada\n"):mostrarDebug("No es una Palabra Reservada");
+	if (!esAlgo) (esNumeroEntero(token))?esAlgo=mostrarLog("Es un número entero\n"):mostrarDebug("No es un número entero");
+	if (!esAlgo) (esNumeroFraccionario(token))?esAlgo=mostrarLog("Es un número real\n"):mostrarDebug("No es un número real");
+	if (!esAlgo) (esID(token))?esAlgo=mostrarLog("Es una variable\n"):mostrarDebug("No es una variable");
+	if (!esAlgo){
+		mostrarLog ("No se pudo identificar\n");
+		return 0;
 	}
+	
+	return 1 ;
+}
 
 void creaPalabrasReservadas(){
 	palabrasReservadas[0]=strdup("BEGIN");
@@ -118,19 +133,5 @@ void creaPalabrasReservadas(){
 	palabrasReservadas[5]=strdup("PERÓN");
 }
 	
-	
-	
-/*
-void buscaPalabrasReservadas(char*palabrasReservadas[],char* tiraDeTokens[],int cantidadDeTokens){
-		for (int i=0; i<cantidadDeTokens ; i++){
-			for (int j=0; j<CANT_RESERVADAS ; j++){
-				if (! strcmp (tiraDeTokens[i],palabrasReservadas[j])){
-					sprintf(stringAuxiliar,"Palabra Reservada [%s] en el token [%d] ",tiraDeTokens[i],i);
-					mostrarNormal(stringAuxiliar);
-				}
-			}
-		}
-}
-*/
 
 

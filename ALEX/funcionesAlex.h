@@ -17,24 +17,19 @@
 #define COLOR_AZUL    "\x1b[34m"
 #define RESET_COLOR   "\x1b[0m"
 
-
 /* ENCABEZADOS DE FUNCIONES */ 
-void mostrarFatal(char* texto);
-void mostrarNormal(char* texto);
-void mostrarLog(char* texto);
-void mostrarDebug(char* texto);
+int mostrarFatal(char* texto);
+int mostrarNormal(char* texto);
+int mostrarLog(char* texto);
+int mostrarDebug(char* texto);
 int validaParametros (int, char*[]);
 FILE* abreArchivo (char*);
 void leerArchivo(FILE*);
 void buscaTokens(FILE*,char*[],int*);
-//void buscaPalabrasReservadas(char*[],char*[],int);
-void identificaTipoDeToken(char *tiraDeTokens[]);
+int identificaTipoDeToken(char *token);
 void creaPalabrasReservadas();
-
 
 /* VARIABLES GLOBALES (sí, aguante!) */
 int interactividad=ERROR;	
 char stringAuxiliar[100];
-
-// declarar acá todas las palabras reservadas del lenguaje, y acordarse de aumentar el tamaño de la constante CANT_RESERVADAS... :P	
 char *palabrasReservadas[CANT_RESERVADAS];
