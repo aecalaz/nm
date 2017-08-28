@@ -26,10 +26,15 @@ void mostrarDebug(char* texto);
 int validaParametros (int, char*[]);
 FILE* abreArchivo (char*);
 void leerArchivo(FILE*);
-void buscaTokens(FILE*,char*[],char*[],int*);
-void buscaPalabrasReservadas(char*[],char*[],int);
+void buscaTokens(FILE*,char*[],int*);
+//void buscaPalabrasReservadas(char*[],char*[],int);
+void identificaTipoDeToken(char *tiraDeTokens[]);
+void creaPalabrasReservadas();
+
 
 /* VARIABLES GLOBALES (sí, aguante!) */
 int interactividad=ERROR;	
 char stringAuxiliar[100];
 
+// declarar acá todas las palabras reservadas del lenguaje, y acordarse de aumentar el tamaño de la constante CANT_RESERVADAS... :P	
+char *palabrasReservadas[CANT_RESERVADAS];
