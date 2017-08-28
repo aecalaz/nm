@@ -1,8 +1,1 @@
-BEGIN
-  variable=123
-  otraVariable = 123.45
-  sarasa=1+2+3+4.5
-  empieza FORT
-  termina TROF
-END
-
+variable=1+2*(10-9.999)

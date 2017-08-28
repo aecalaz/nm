@@ -30,6 +30,6 @@ int identificaTipoDeToken(char *token);
 void creaPalabrasReservadas();
 
 /* VARIABLES GLOBALES (sí, aguante!) */
-int interactividad=DEBUG;	
+int interactividad=ERROR;	
 char stringAuxiliar[100];
 char *palabrasReservadas[CANT_RESERVADAS];
