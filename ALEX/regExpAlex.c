@@ -95,12 +95,6 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  * Devuelven 0 si el token enviado no coincide en un 100% con el tipo buscado, o un 1 en caso de coincidir.
  */
  
-int esOperador(char* token){
-	int coincidencias=buscaRegExp(token,"\+ | \- | \* | \/ | \(|\) ");
-	if (coincidencias && (coincidencias == strlen (token) ))
-		return 1;  // es un caso válido
-	return 0;      // no es una caso válido	
-}
 
 int esNumeroEntero(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+");
@@ -143,4 +137,13 @@ int esPalabraReservada(char* token){
 			if (! strcmp (token,palabrasReservadas[j]))
 					return 1;  // es una coincidencia al 100%
 	return 0;	
+}
+
+
+int esOperador(char* token){
+	char caracter = token[0];
+	if (strlen(token) == 1) 
+		if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '=' || caracter == '(' || caracter == ')'  )
+			return 1;
+	return 0;      // no es una caso válido	
 }

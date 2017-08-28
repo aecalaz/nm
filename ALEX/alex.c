@@ -1,6 +1,7 @@
 #include "funcionesAlex.c"
 
 /**********   MAIN    *************/
+
 int main (int argc, char *argv[]){
 	FILE* archivoFuente,*principioArchivoFuente;
 	char *tiraDeTokens[100];  // inicialmente, quiero ver que funcione con 100 tokens.

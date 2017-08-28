@@ -160,6 +160,7 @@ int identificaTipoDeToken (char *token){
 	if (!esAlgo) (esNumeroEntero(token))?esAlgo=mostrarLog("Es un número entero\n"):mostrarDebug("No es un número entero");
 	if (!esAlgo) (esNumeroFraccionario(token))?esAlgo=mostrarLog("Es un número real\n"):mostrarDebug("No es un número real");
 	if (!esAlgo) (esID(token))?esAlgo=mostrarLog("Es una variable\n"):mostrarDebug("No es una variable");
+	if (!esAlgo) (esOperador(token))?esAlgo=mostrarLog("Es un operador\n"):mostrarDebug("No es un operador");
 	if (!esAlgo){
 		mostrarLog ("No se pudo identificar\n");
 		return 0;
