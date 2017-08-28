@@ -1,0 +1,7 @@
+BEGIN
+  variable 123
+  otraVariable 123.45
+  empieza FORT
+  termina TROF
+END
+
