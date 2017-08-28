@@ -72,7 +72,6 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  */
 	
 // regexec() returns 0 on match, otherwise REG_NOMATCH
-// ¿mantengo el estándar de devolver 0 al matchear, o hago lo humanamente entendible?
 	
 	int rv;
 	regex_t expresion;
@@ -89,15 +88,20 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
 
 }
 
-
 /*
- * Las funciones que vienen a continuación (que arrancan con "es" 
+ * Las funciones que vienen a continuación (que arrancan con "es") 
  * Enmascaran la función buscaRegExp de manera ordenada, para averiguar si el token enviado
  * es un número, una cadena de texto, algo mezclado, o lo que sea.
  * Devuelven 0 si el token enviado no coincide en un 100% con el tipo buscado, o un 1 en caso de coincidir.
  */
-
  
+int esOperador(char* token){
+	int coincidencias=buscaRegExp(token,"\+ | \- | \* | \/ | \(|\) ");
+	if (coincidencias && (coincidencias == strlen (token) ))
+		return 1;  // es un caso válido
+	return 0;      // no es una caso válido	
+}
+
 int esNumeroEntero(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+");
 	if (coincidencias && (coincidencias == strlen (token) ))
@@ -123,7 +127,7 @@ int esTexto(char* token){
 
 int esID(char* token){
 	// Arranca con una letra y sigue con letras o números
-	int coincidencias=buscaRegExp(token,"[a-zA-Z]([a-zA-Z]|[0-9]|_|-)*");
+	int coincidencias=buscaRegExp(token,"[a-zA-Z]([a-zA-Z]|[0-9]|_)*");
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
@@ -134,13 +138,9 @@ int esPalabraReservada(char* token){
 	 * Esto es mentira, no uso RegExp, sino que comparo directamente con strcmp. 
 	 * Pero la dejo acá por una cuestión de homogeneidad.
 	 */
-	 if (strlen (token)) { // verifico que no sea una palabra vacía.
-		 for (int j=0; j<CANT_RESERVADAS ; j++){
-			if (! strcmp (token,palabrasReservadas[j])){
+	 if (strlen (token)) // verifico que no sea una palabra vacía.
+		 for (int j=0; j<CANT_RESERVADAS ; j++)
+			if (! strcmp (token,palabrasReservadas[j]))
 					return 1;  // es una coincidencia al 100%
-			}	
-		}
-	}
-	 
 	return 0;	
 }

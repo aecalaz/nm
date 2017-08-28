@@ -84,13 +84,57 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 		mostrarLog(stringAuxiliar);
 		
 		if (caracter != ' ' && caracter != '\n' && caracter != '\t'){
-			buffer[desplazamiento]=caracter;  //consumo un char en el buffer o lo ignoro
-			desplazamiento++;
-			sprintf(stringAuxiliar,"char [%c] consumido\n",caracter);
-			mostrarLog(stringAuxiliar);
+			/*
+			 *  verifico si el caracter es un + - * / = ( ) o algo así
+			 * Debería emprolijar un poco esto, y el código que se repite, meterlo en una función.
+			 */
+			 
+			if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '=' || caracter == '(' || caracter == ')'  ){
+					if (!desplazamiento){ 
+						/* Si está al principio el token, ES el token, así que lo inserto como un token nuevo */
+						buffer[desplazamiento]=caracter;
+						desplazamiento++;
+						buffer[desplazamiento]='\0';
+						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
+						mostrarNormal(stringAuxiliar);
+						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
+						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						(*cantidadDeTokens)++;			
+						desplazamiento=0;	
+					}
+					else{  //si venía en medio de un token Por ejemplo: "variable+variable"
+						/* cierro el token actual */ 
+						buffer[desplazamiento]='\0';
+						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
+						mostrarNormal(stringAuxiliar);
+						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
+						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						(*cantidadDeTokens)++;			
+						desplazamiento=0;
+						
+						/* y lo inserto como nuevo token */
+						buffer[desplazamiento]=caracter;
+						desplazamiento++;
+						buffer[desplazamiento]='\0';
+						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
+						mostrarNormal(stringAuxiliar);
+						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
+						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						(*cantidadDeTokens)++;			
+						desplazamiento=0;	
+					
+					}
+			}  /* Si estoy acá, continúo grabando el token */
+			else {
+				buffer[desplazamiento]=caracter;  //consumo un char en el buffer o lo ignoro
+				desplazamiento++;
+				sprintf(stringAuxiliar,"char [%c] consumido\n",caracter);
+				mostrarLog(stringAuxiliar);
+			}
 		}
 		else{
 			if (desplazamiento) {
+				
 				/* 
 				 * Si llegué hasta acá, encontré un nuevo token. Lo marco como '\0' y me fijo
 				 * qué tipo de token es utilizando las funciones de regExp
