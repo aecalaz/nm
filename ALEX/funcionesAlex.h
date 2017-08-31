@@ -23,10 +23,12 @@ int mostrarNormal(char* texto);
 int mostrarLog(char* texto);
 int mostrarDebug(char* texto);
 int validaParametros (int, char*[]);
-FILE* abreArchivo (char*);
+FILE* abreArchivoFuente (char*);
+FILE* creaArchivoLex (char*);
+
 void leerArchivo(FILE*);
-void buscaTokens(FILE*,char*[],int*);
-int identificaTipoDeToken(char *token);
+void buscaTokens(FILE*,FILE*,char*[],int*);
+int identificaTipoDeToken(FILE*,char *token);
 void creaPalabrasReservadas();
 
 /* VARIABLES GLOBALES (sí, aguante!) */

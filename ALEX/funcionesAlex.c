@@ -50,17 +50,24 @@ int validaParametros (int cantArgumentos, char* argumentos[]){
 }
 
 
- FILE* abreArchivo (char* archivoFuente){
+ FILE* abreArchivoFuente (char* archivoFuente){
 	FILE* pFuente= fopen (archivoFuente, "rt");
-	if (! pFuente){
-		sprintf(stringAuxiliar,"Error al abrir el archivo [%s]\n",archivoFuente);
-		mostrarNormal(stringAuxiliar);
+	if (! pFuente)
 		return NULL;
-		}
 	sprintf(stringAuxiliar,"Archivo [%s] abierto correctamente\n",archivoFuente);
 	mostrarLog(stringAuxiliar);
 	return pFuente;
 }
+
+ FILE* creaArchivoLex (char* archivoLex){
+	FILE* pLex= fopen (archivoLex, "wt");
+	if (! pLex)
+		return NULL;
+	sprintf(stringAuxiliar,"Archivo léxico [%s] abierto correctamente\n",archivoLex);
+	mostrarLog(stringAuxiliar);
+	return pLex;
+}
+
 
 void leerArchivo(FILE* archivoFuente){
 	char caracter;
@@ -69,7 +76,7 @@ void leerArchivo(FILE* archivoFuente){
 	}
 }
 
-void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens){
+void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* cantidadDeTokens){
 	creaPalabrasReservadas();
 	mostrarNormal("Buscando Tokens\n");
 	char caracter;
@@ -98,7 +105,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;	
 					}
@@ -108,7 +115,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;
 						
@@ -119,7 +126,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;	
 					
@@ -144,7 +151,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 				sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 				mostrarNormal(stringAuxiliar);
 				tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-				identificaTipoDeToken(tiraDeTokens[*cantidadDeTokens]);
+				identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
 				(*cantidadDeTokens)++;			
 				desplazamiento=0;
 			}
@@ -152,7 +159,7 @@ void buscaTokens(FILE* archivoFuente,char* tiraDeTokens[],int* cantidadDeTokens)
 	}
 }
 
-int identificaTipoDeToken (char *token){
+int identificaTipoDeToken (FILE* archivoLex, char *token){
 	sprintf(stringAuxiliar,"Identificando Token:  [%s]",token);
 	mostrarDebug(stringAuxiliar);
 	int esAlgo=0;
@@ -165,17 +172,17 @@ int identificaTipoDeToken (char *token){
 		mostrarLog ("No se pudo identificar\n");
 		return 0;
 	}
-	
+	fprintf (archivoLex,"%s\n",token);
 	return 1 ;
 }
 
 void creaPalabrasReservadas(){
 	palabrasReservadas[0]=strdup("BEGIN");
-	palabrasReservadas[1]=strdup("IF");
+	palabrasReservadas[1]=strdup("END");
 	palabrasReservadas[2]=strdup("FORT");
-	palabrasReservadas[3]=strdup("SARASA");
-	palabrasReservadas[4]=strdup("VIVA");
-	palabrasReservadas[5]=strdup("PERÓN");
+	palabrasReservadas[3]=strdup("TROF");
+	palabrasReservadas[4]=strdup("WHILE");
+	palabrasReservadas[5]=strdup("ELIHW");
 }
 	
 
