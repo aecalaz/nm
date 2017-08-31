@@ -24,7 +24,7 @@
 #define TIPO_REAL 3
 #define TIPO_TEXTO 4
 #define TIPO_ID 5
-#define TIPO_OP 6
+#define TIPO_OP 100
 
 /* ENCABEZADOS DE FUNCIONES */ 
 int mostrarFatal(char* texto);

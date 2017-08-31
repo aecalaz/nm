@@ -74,16 +74,13 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
 	rv = regcomp(&expresion, regExp, REG_EXTENDED);  //compila la regexp que recibe por parámetro
 		
 	regmatch_t matches[MAX_MATCHES]; //A list of the matches in the string (a list of 1)
-	if (regexec(&expresion, cadenaParaAnalizar, MAX_MATCHES, matches, 0) == 0) {
+	if (regexec(&expresion, cadenaParaAnalizar, MAX_MATCHES, matches, 0) == 0) 
 		sprintf(stringAuxiliar,"\"%s\" la expresión regular matcheó entre los caracteres %d y %d con la expresión \"%s\"", cadenaParaAnalizar, matches[0].rm_so, matches[0].rm_eo, regExp) ;
-		mostrarDebug(stringAuxiliar);
-		return 0;}	
 	else 
-		{sprintf(stringAuxiliar,"\"%s\" no hubo match en \"%s\" :(", cadenaParaAnalizar,regExp);	
-		mostrarDebug(stringAuxiliar);
-		return 1;
-	}
-	//return (matches[0].rm_eo-matches[0].rm_so); //cantidad de coincidencias (comentado, hacía cagada)
+		sprintf(stringAuxiliar,"\"%s\" no hubo match en \"%s\" :(", cadenaParaAnalizar,regExp);	
+	mostrarDebug(stringAuxiliar);
+	
+	return (matches[0].rm_eo-matches[0].rm_so); //cantidad de coincidencias (comentado, hacía cagada)
 }
 
 /*
@@ -95,6 +92,7 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  
 int esNumeroEntero(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+");
+	printf ("ENTERO: %d %d\n",coincidencias,strlen(token));
 	if (coincidencias && coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
@@ -102,15 +100,18 @@ int esNumeroEntero(char* token){
 
 int esNumeroFraccionario(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+\\.[0-9]+");
+	printf ("REAL: %d %d\n",coincidencias,strlen(token));
+
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
 }
 
-
 int esTexto(char* token){
 	//sólo texto sin espacios, mayúsculas o minúsculas
 	int coincidencias=buscaRegExp(token,"[a-zA-Z]+");
+	printf ("TEXTO: %d %d\n",coincidencias,strlen(token));
+
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
@@ -119,6 +120,8 @@ int esTexto(char* token){
 int esID(char* token){
 	// Arranca con una letra y sigue con letras o números
 	int coincidencias=buscaRegExp(token,"[a-zA-Z]([a-zA-Z]|[0-9]|_)*");
+	printf ("ID: %d %d\n",coincidencias,strlen(token));
+
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	

@@ -68,7 +68,6 @@ int validaParametros (int cantArgumentos, char* argumentos[]){
 	return pLex;
 }
 
-
 void leerArchivo(FILE* archivoFuente){
 	char caracter;
 	while (  (caracter = fgetc(archivoFuente)) != EOF ) {
@@ -128,8 +127,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
 						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens],*cantidadDeTokens);
 						(*cantidadDeTokens)++;			
-						desplazamiento=0;	
-					
+						desplazamiento=0;			
 					}
 			}  /* Si estoy acá, continúo grabando el token */
 			else {
@@ -163,13 +161,17 @@ int identificaTipoDeToken (FILE* archivoLex, char *token, int numeroDeToken){
 	sprintf(stringAuxiliar,"Identificando Token:  [%s]",token);
 	mostrarDebug(stringAuxiliar);
 	int tipoDeToken=TIPO_DESCONOCIDO;
-	
+	/* Hay algo extraño en esta parte, dadas las regex actuales, a veces matchea incorrectamente.
+	 * Para solucionarlo, cambié el orden de las preguntas... así que ojo al cambiar el orden.
+	 * Sí, ya sé... soy muy elegante.
+	 */
 	if (!tipoDeToken) (esPalabraReservada(token))?tipoDeToken=TIPO_PR :mostrarDebug("No es una Palabra Reservada");
+	if (!tipoDeToken) (esOperador(token))?tipoDeToken=TIPO_OP:mostrarDebug("No es un operador");
+	if (!tipoDeToken) (esTexto(token))?tipoDeToken=TIPO_TEXTO:mostrarDebug("No es texto");
 	if (!tipoDeToken) (esNumeroEntero(token))?tipoDeToken=TIPO_ENT:mostrarDebug("No es un número entero");
 	if (!tipoDeToken) (esNumeroFraccionario(token))?tipoDeToken=TIPO_REAL:mostrarDebug("No es un número real");
-	if (!tipoDeToken) (esTexto(token))?tipoDeToken=TIPO_TEXTO:mostrarDebug("No es texto");
 	if (!tipoDeToken) (esID(token))?tipoDeToken=TIPO_ID:mostrarDebug("No es una variable");
-	if (!tipoDeToken) (esOperador(token))?tipoDeToken=TIPO_OP:mostrarDebug("No es un operador");
+
 	if (!tipoDeToken){
 		mostrarLog ("No se pudo identificar\n");
 		return 0;
