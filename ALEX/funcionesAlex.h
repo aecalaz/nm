@@ -17,6 +17,15 @@
 #define COLOR_AZUL    "\x1b[34m"
 #define RESET_COLOR   "\x1b[0m"
 
+/* tipos de token */
+#define TIPO_DESCONOCIDO 0
+#define TIPO_PR 1
+#define TIPO_ENT 2
+#define TIPO_REAL 3
+#define TIPO_TEXTO 4
+#define TIPO_ID 5
+#define TIPO_OP 6
+
 /* ENCABEZADOS DE FUNCIONES */ 
 int mostrarFatal(char* texto);
 int mostrarNormal(char* texto);
@@ -28,7 +37,7 @@ FILE* creaArchivoLex (char*);
 
 void leerArchivo(FILE*);
 void buscaTokens(FILE*,FILE*,char*[],int*);
-int identificaTipoDeToken(FILE*,char *token);
+int identificaTipoDeToken(FILE*,char *, int);
 void creaPalabrasReservadas();
 
 /* VARIABLES GLOBALES (sí, aguante!) */

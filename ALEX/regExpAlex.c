@@ -32,11 +32,9 @@ void ejemploRegExp(){
 		mostrarLog(stringAuxiliar);
 	}
 
- 	
  	 //suficientes ejemplos	
 	interactividad=interactividadOriginal;
 	}
-
 
 int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
 	
@@ -57,9 +55,7 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  * Sugiero no utilizar esta función directamente, sino enmascarada en otra función que asegure que 
  * la regexp usada tenga sentido y no haga que explote todo.
  * 
- */
-
-/*  Machete de expresiones regulares
+ * Machete de expresiones regulares
  * 
  * -?[0-9]+(\\.[0-9]+)?     //verificar qué demonios hace estar regex
  * 
@@ -78,14 +74,16 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
 	rv = regcomp(&expresion, regExp, REG_EXTENDED);  //compila la regexp que recibe por parámetro
 		
 	regmatch_t matches[MAX_MATCHES]; //A list of the matches in the string (a list of 1)
-	if (regexec(&expresion, cadenaParaAnalizar, MAX_MATCHES, matches, 0) == 0) 
+	if (regexec(&expresion, cadenaParaAnalizar, MAX_MATCHES, matches, 0) == 0) {
 		sprintf(stringAuxiliar,"\"%s\" la expresión regular matcheó entre los caracteres %d y %d con la expresión \"%s\"", cadenaParaAnalizar, matches[0].rm_so, matches[0].rm_eo, regExp) ;
+		mostrarDebug(stringAuxiliar);
+		return 0;}	
 	else 
-		sprintf(stringAuxiliar,"\"%s\" no hubo match en \"%s\" :(", cadenaParaAnalizar,regExp);	
-	mostrarDebug(stringAuxiliar);
-
-	return (matches[0].rm_eo-matches[0].rm_so); //cantidad de coincidencias
-
+		{sprintf(stringAuxiliar,"\"%s\" no hubo match en \"%s\" :(", cadenaParaAnalizar,regExp);	
+		mostrarDebug(stringAuxiliar);
+		return 1;
+	}
+	//return (matches[0].rm_eo-matches[0].rm_so); //cantidad de coincidencias (comentado, hacía cagada)
 }
 
 /*
@@ -97,7 +95,7 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  
 int esNumeroEntero(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+");
-	if (coincidencias && (coincidencias == strlen (token) ))
+	if (coincidencias && coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
 }
@@ -127,10 +125,6 @@ int esID(char* token){
 }
 
 int esPalabraReservada(char* token){
-	/*
-	 * Esto es mentira, no uso RegExp, sino que comparo directamente con strcmp. 
-	 * Pero la dejo acá por una cuestión de homogeneidad.
-	 */
 	 if (strlen (token)) // verifico que no sea una palabra vacía.
 		 for (int j=0; j<CANT_RESERVADAS ; j++)
 			if (! strcmp (token,palabrasReservadas[j]))

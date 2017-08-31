@@ -105,7 +105,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens], *cantidadDeTokens);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;	
 					}
@@ -115,7 +115,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens],*cantidadDeTokens);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;
 						
@@ -126,7 +126,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 						sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 						mostrarNormal(stringAuxiliar);
 						tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
+						identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens],*cantidadDeTokens);
 						(*cantidadDeTokens)++;			
 						desplazamiento=0;	
 					
@@ -151,7 +151,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 				sprintf(stringAuxiliar,"Nuevo Token(%d):  [%s]\n",*cantidadDeTokens,buffer);
 				mostrarNormal(stringAuxiliar);
 				tiraDeTokens[*cantidadDeTokens]=strdup(buffer);
-				identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens]);
+				identificaTipoDeToken(archivoLex,tiraDeTokens[*cantidadDeTokens],*cantidadDeTokens);
 				(*cantidadDeTokens)++;			
 				desplazamiento=0;
 			}
@@ -159,20 +159,25 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 	}
 }
 
-int identificaTipoDeToken (FILE* archivoLex, char *token){
+int identificaTipoDeToken (FILE* archivoLex, char *token, int numeroDeToken){
 	sprintf(stringAuxiliar,"Identificando Token:  [%s]",token);
 	mostrarDebug(stringAuxiliar);
-	int esAlgo=0;
-	if (!esAlgo) (esPalabraReservada(token))?esAlgo=mostrarLog("Es una Palabra Reservada\n"):mostrarDebug("No es una Palabra Reservada");
-	if (!esAlgo) (esNumeroEntero(token))?esAlgo=mostrarLog("Es un número entero\n"):mostrarDebug("No es un número entero");
-	if (!esAlgo) (esNumeroFraccionario(token))?esAlgo=mostrarLog("Es un número real\n"):mostrarDebug("No es un número real");
-	if (!esAlgo) (esID(token))?esAlgo=mostrarLog("Es una variable\n"):mostrarDebug("No es una variable");
-	if (!esAlgo) (esOperador(token))?esAlgo=mostrarLog("Es un operador\n"):mostrarDebug("No es un operador");
-	if (!esAlgo){
+	int tipoDeToken=TIPO_DESCONOCIDO;
+	
+	if (!tipoDeToken) (esPalabraReservada(token))?tipoDeToken=TIPO_PR :mostrarDebug("No es una Palabra Reservada");
+	if (!tipoDeToken) (esNumeroEntero(token))?tipoDeToken=TIPO_ENT:mostrarDebug("No es un número entero");
+	if (!tipoDeToken) (esNumeroFraccionario(token))?tipoDeToken=TIPO_REAL:mostrarDebug("No es un número real");
+	if (!tipoDeToken) (esTexto(token))?tipoDeToken=TIPO_TEXTO:mostrarDebug("No es texto");
+	if (!tipoDeToken) (esID(token))?tipoDeToken=TIPO_ID:mostrarDebug("No es una variable");
+	if (!tipoDeToken) (esOperador(token))?tipoDeToken=TIPO_OP:mostrarDebug("No es un operador");
+	if (!tipoDeToken){
 		mostrarLog ("No se pudo identificar\n");
 		return 0;
 	}
-	fprintf (archivoLex,"%s\n",token);
+	fprintf (archivoLex,"%d · %d · %s \n",numeroDeToken,tipoDeToken,token);
+	sprintf (stringAuxiliar,"%d · %d · %s \n",numeroDeToken,tipoDeToken,token);
+	mostrarDebug(stringAuxiliar);
+
 	return 1 ;
 }
 
