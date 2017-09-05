@@ -26,8 +26,8 @@ void ejemploRegExp(){
 		mostrarLog(stringAuxiliar);
 		(esNumeroFraccionario(loteDePruebas[i]))?sprintf(stringAuxiliar,"%s es fraccionario\n",loteDePruebas[i]):sprintf(stringAuxiliar,"%s no es fraccionario\n",loteDePruebas[i]);
 		mostrarLog(stringAuxiliar);
-		(esTexto(loteDePruebas[i]))?sprintf(stringAuxiliar,"%s es palabra\n",loteDePruebas[i]):sprintf(stringAuxiliar,"%s no es palabra\n",loteDePruebas[i]);
-		mostrarLog(stringAuxiliar);
+//		(esTexto(loteDePruebas[i]))?sprintf(stringAuxiliar,"%s es palabra\n",loteDePruebas[i]):sprintf(stringAuxiliar,"%s no es palabra\n",loteDePruebas[i]);
+//		mostrarLog(stringAuxiliar);
 		(esID(loteDePruebas[i]))?sprintf(stringAuxiliar,"%s es un ID \n",loteDePruebas[i]):sprintf(stringAuxiliar,"%s no es un ID\n",loteDePruebas[i]);
 		mostrarLog(stringAuxiliar);
 	}
@@ -92,7 +92,9 @@ int buscaRegExp(char* cadenaParaAnalizar, char *regExp) {
  
 int esNumeroEntero(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+");
-	printf ("ENTERO: %d %d\n",coincidencias,strlen(token));
+	sprintf (stringAuxiliar,"ENTERO: %d %d\n",coincidencias,strlen(token));
+	mostrarDebug(stringAuxiliar);
+	
 	if (coincidencias && coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
@@ -100,28 +102,31 @@ int esNumeroEntero(char* token){
 
 int esNumeroFraccionario(char* token){
 	int coincidencias=buscaRegExp(token,"[0-9]+\\.[0-9]+");
-	printf ("REAL: %d %d\n",coincidencias,strlen(token));
-
+	sprintf (stringAuxiliar,"REAL: %d %d\n",coincidencias,strlen(token));
+	mostrarDebug(stringAuxiliar);
+	
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
 }
-
+/*
 int esTexto(char* token){
 	//sólo texto sin espacios, mayúsculas o minúsculas
 	int coincidencias=buscaRegExp(token,"[a-zA-Z]+");
-	printf ("TEXTO: %d %d\n",coincidencias,strlen(token));
-
+	sprintf (stringAuxiliar,"TEXTO: %d %d\n",coincidencias,strlen(token));
+	mostrarDebug(stringAuxiliar);
+	
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	
 }
-
+*/
 int esID(char* token){
 	// Arranca con una letra y sigue con letras o números
 	int coincidencias=buscaRegExp(token,"[a-zA-Z]([a-zA-Z]|[0-9]|_)*");
-	printf ("ID: %d %d\n",coincidencias,strlen(token));
-
+	sprintf (stringAuxiliar, "ID: %d %d\n",coincidencias,strlen(token));
+	mostrarDebug(stringAuxiliar);
+	
 	if (coincidencias && (coincidencias == strlen (token) ))
 		return 1;  // es un caso válido
 	return 0;      // no es una caso válido	

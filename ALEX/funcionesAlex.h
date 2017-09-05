@@ -22,9 +22,9 @@
 #define TIPO_PR 1
 #define TIPO_ENT 2
 #define TIPO_REAL 3
-#define TIPO_TEXTO 4
-#define TIPO_ID 5
-#define TIPO_OP 100
+#define TIPO_ID 4
+#define TIPO_OP_MULTIP 100
+#define TIPO_OP_SUMA 101
 
 /* ENCABEZADOS DE FUNCIONES */ 
 int mostrarFatal(char* texto);
@@ -32,13 +32,15 @@ int mostrarNormal(char* texto);
 int mostrarLog(char* texto);
 int mostrarDebug(char* texto);
 int validaParametros (int, char*[]);
-FILE* abreArchivoFuente (char*);
-FILE* creaArchivoLex (char*);
+FILE* abreArchivoLectura (char*);
+FILE* creaArchivoNuevo (char*);
 
 void leerArchivo(FILE*);
 void buscaTokens(FILE*,FILE*,char*[],int*);
 int identificaTipoDeToken(FILE*,char *, int);
 void creaPalabrasReservadas();
+void agrupaTokens(FILE* archivoLex,int *);
+
 
 /* VARIABLES GLOBALES (sí, aguante!) */
 int interactividad=ERROR;	

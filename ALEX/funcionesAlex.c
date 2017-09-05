@@ -50,7 +50,7 @@ int validaParametros (int cantArgumentos, char* argumentos[]){
 }
 
 
- FILE* abreArchivoFuente (char* archivoFuente){
+ FILE* abreArchivoLectura (char* archivoFuente){
 	FILE* pFuente= fopen (archivoFuente, "rt");
 	if (! pFuente)
 		return NULL;
@@ -59,7 +59,7 @@ int validaParametros (int cantArgumentos, char* argumentos[]){
 	return pFuente;
 }
 
- FILE* creaArchivoLex (char* archivoLex){
+ FILE* creaArchivoNuevo (char* archivoLex){
 	FILE* pLex= fopen (archivoLex, "wt");
 	if (! pLex)
 		return NULL;
@@ -95,7 +95,7 @@ void buscaTokens(FILE* archivoFuente,FILE* archivoLex,char* tiraDeTokens[],int* 
 			 * Debería emprolijar un poco esto, y el código que se repite, meterlo en una función.
 			 */
 			 
-			if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '=' || caracter == '(' || caracter == ')'  ){
+			if (caracter == '+' ||  caracter == '*' || caracter == '='  ){
 					if (!desplazamiento){ 
 						/* Si está al principio el token, ES el token, así que lo inserto como un token nuevo */
 						buffer[desplazamiento]=caracter;
@@ -166,8 +166,16 @@ int identificaTipoDeToken (FILE* archivoLex, char *token, int numeroDeToken){
 	 * Sí, ya sé... soy muy elegante.
 	 */
 	if (!tipoDeToken) (esPalabraReservada(token))?tipoDeToken=TIPO_PR :mostrarDebug("No es una Palabra Reservada");
-	if (!tipoDeToken) (esOperador(token))?tipoDeToken=TIPO_OP:mostrarDebug("No es un operador");
-	if (!tipoDeToken) (esTexto(token))?tipoDeToken=TIPO_TEXTO:mostrarDebug("No es texto");
+	if (!tipoDeToken && esOperador(token)) {
+		if (token[0] == '*') 
+			tipoDeToken=TIPO_OP_MULTIP;
+		if (token[0] == '+') 
+			tipoDeToken=TIPO_OP_SUMA;
+	}
+	else {
+		mostrarDebug("No es un operador");
+	}
+//	if (!tipoDeToken) (esTexto(token))?tipoDeToken=TIPO_TEXTO:mostrarDebug("No es texto");
 	if (!tipoDeToken) (esNumeroEntero(token))?tipoDeToken=TIPO_ENT:mostrarDebug("No es un número entero");
 	if (!tipoDeToken) (esNumeroFraccionario(token))?tipoDeToken=TIPO_REAL:mostrarDebug("No es un número real");
 	if (!tipoDeToken) (esID(token))?tipoDeToken=TIPO_ID:mostrarDebug("No es una variable");
@@ -176,8 +184,8 @@ int identificaTipoDeToken (FILE* archivoLex, char *token, int numeroDeToken){
 		mostrarLog ("No se pudo identificar\n");
 		return 0;
 	}
-	fprintf (archivoLex,"%d · %d · %s \n",numeroDeToken,tipoDeToken,token);
-	sprintf (stringAuxiliar,"%d · %d · %s \n",numeroDeToken,tipoDeToken,token);
+	fprintf (archivoLex,"%d ·%d··%s\n",numeroDeToken,tipoDeToken,token);
+	sprintf (stringAuxiliar,"%d ·%d··%s\n",numeroDeToken,tipoDeToken,token);
 	mostrarDebug(stringAuxiliar);
 
 	return 1 ;
@@ -191,6 +199,45 @@ void creaPalabrasReservadas(){
 	palabrasReservadas[4]=strdup("WHILE");
 	palabrasReservadas[5]=strdup("ELIHW");
 }
+/*
+ * recupera los tokens del archivo (esto ya es del sintáctico, habría que separarlo) e identifica el tipo
+ * para poder agrupar en Términos y Factores.
+ * */
+void agrupaTokens(FILE* archivoLex,int *cantidadDeTokens)	{
+		int vectorFactores[*cantidadDeTokens];
+		int vectorTipos[*cantidadDeTokens];
+		char* vectorTokens[*cantidadDeTokens];
+		mostrarDebug("AGRUPANDO TOKENS");
+		char aux[100];
+		
+		for (int i=0 ;  i < *cantidadDeTokens -1; i++ ) {
+			vectorFactores[i]=0;
+			fgets(stringAuxiliar,100,archivoLex);
+			
+			// recupero el token propiamente dicho
+			char* token=strdup(strstr(stringAuxiliar, "··"	)+4); //el +4 es para evitar el patrón de búsqueda
+			*(strstr(stringAuxiliar, "··"))='\0'; // corto el string
+			
+			token[strlen(token)-1]='\0';  // quito el \n
+			vectorTokens[i]=strdup(token);
+			token-4+'\0'; // acorto el string para recuperar el tipo de token
+
+			char* tipo=strdup(strstr(stringAuxiliar, "·")+2); //el +3 es para evitar el patrón de búsqueda
+			vectorTipos[i]=strdup(tipo);
+			
+			sprintf (aux,"Recuperando el token {%s} \tdel tipo \t{%s}\n",vectorTokens[i],tipo);
+			mostrarLog(aux);
+		}			
+/* A esta altura, ya tengo un vector de tokens y un vector de tipos, con los mismos datos del analizador léxico */
+
+// busco factores
+//		for (int i=0 ;  i < *cantidadDeTokens -1; i++ ) {
+//				if (
+//		}			
+			
+			
 	
-
-
+			
+		
+		
+}
